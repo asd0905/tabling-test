@@ -1,4 +1,8 @@
-$(function () {
-    console.log(1);
-    console.log(2);
-})
+import { sayHello } from "./modules/module";
+import '../css/style.scss';
+
+function myFunc() {
+    sayHello("mike");
+    console.log("myFunc");
+}
+myFunc();
