@@ -1,5 +1,6 @@
 export default class DataModule {
     rezData = [];
+    rezDetail = {};
 
     constructor() {
 
@@ -21,6 +22,7 @@ export default class DataModule {
 
             const response = await res.json();
             this.rezData = response.reservations.filter(data => data.status !== 'done');
+            this.rezDetail = this.rezData[0];
         } catch (e) {
             console.log(e);
             this.rezData = [];

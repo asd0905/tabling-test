@@ -23,7 +23,7 @@ class SetHtml extends DataModule {
     }
 
 
-    // 예약 데이터 세팅해주기
+    // 예약 데이터 리스트 세팅해주기
     setReservations = async () => {
         const element = document.getElementById('rez-list');
 
@@ -37,41 +37,51 @@ class SetHtml extends DataModule {
         for (const data of reservations) {
             rezStr = rezStr +
                 `
-                <div>
-                    <div class='info1'>
-                        <span>${new Date(data.timeReserved).getHours()} :
+                <div class='rez' data-id='${data.id}'>
+                    <div class='info1' data-id='${data.id}'>
+                        <span data-id='${data.id}'>${new Date(data.timeReserved).getHours()} :
                         ${new Date(data.timeReserved).getMinutes() === 0 ? '00' : new Date(data.timeReserved).getMinutes()}</span>
-                        ${data.status === 'reserved' ? '<span style="color: #3BB94C">예약</span >' : '<span style="color: #162149">착석 중</span>'}
+                        <span data-id='${data.id}' ${data.status === 'reserved' ? 'style="color: #3BB94C">예약</span >' : 'style="color: #162149">착석 중</span>'}
                     </div>
-                    <div class='info2'>
-                        <span>${data.customer.name} - ${data.tables.map(d => d.name).join(', ')}</span>
-                        <span>성인 ${data.customer.adult} 아이 ${data.customer.child}</span>
-                        <span>${data.menus.map(d => d.name).join(', ')} ${data.menus.reduce((a, b) => a + b.qty, 0)}</span>
+                    <div class='info2' data-id='${data.id}'>
+                        <span data-id='${data.id}'>${data.customer.name} - ${data.tables.map(d => d.name).join(', ')}</span>
+                        <span data-id='${data.id}'>성인 ${data.customer.adult} 아이 ${data.customer.child}</span>
+                        <span data-id='${data.id}'>${data.menus.map(d => d.name).join(', ')} ${data.menus.reduce((a, b) => a + b.qty, 0)}</span>
                     </div>
-                    <div class='info3'>
+                    <div class='info3' data-id='${data.id}'>
                         <button data-id='${data.id}' ${data.status === 'reserved' ? 'class="btn reserved">착석</button >' : 'class="btn seated">퇴석</button>'}
                     </div>
                 </div>
             `;
         }
-
-        console.log(rezStr);
         element.innerHTML = rezStr;
 
         for (const element of document.getElementsByClassName('btn')) {
             element.onclick = (event) => {
-                console.log(event.target.dataset.id);
                 this.rezChange(event.target.dataset.id);
                 this.setReservations();
             }
         }
+
+        for (const element of document.getElementsByClassName('rez')) {
+            element.onclick = (event) => {
+                event.stopPropagation();
+                if (event.target.className.indexOf('btn') !== -1) {
+                    return;
+                }
+                this.setRezDetail(event.target.dataset.id);
+            }
+        }
+    }
+
+    // 예약 데이터 상세 보여주기
+    setRezDetail(id) {
+        console.log(id);
     }
 }
-const setHtml = new SetHtml();
-
-
 
 window.onload = async () => {
+    const setHtml = new SetHtml();
     setHtml.setTitle();
     setHtml.mainStructure();
     await setHtml.setReservations();
