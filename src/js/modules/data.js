@@ -28,10 +28,10 @@ export default class DataModule {
     }
 
     /**
-     * 예약 버튼 클릭 (착석/퇴석)
+     * 예약 내용 변경 (착석/퇴석)
      * @param data: 선택한 데이터 
      */
-    onClickBtn = (id) => {
+    rezChange = (id) => {
         let type = 'reserved';
         for (const d of this.rezData) {
             if (d.id === id) {
