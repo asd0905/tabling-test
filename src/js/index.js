@@ -36,8 +36,7 @@ class SetHtml {
         let rezStr = '';
         for (const data of reservations) {
             const rDate = new Date(data.timeReserved);
-            rezStr = rezStr +
-                `
+            rezStr = rezStr + `
                 <div class='rez' data-id='${data.id}'>
                     <div class='info1' data-id='${data.id}'>
                         <span data-id='${data.id}'>${rDate.getHours()} :
@@ -61,6 +60,12 @@ class SetHtml {
         for (const element of document.getElementsByClassName('btn')) {
             element.onclick = (event) => {
                 this.dataModule.rezChange(event.target.dataset.id);
+
+                // 데이터가 모두 지워졌을 때
+                if (this.dataModule.rezData.length - this.dataModule.rezData.filter(d => d.status === 'done').length === 0) {
+                    document.getElementById('root').innerHTML = '<p>예약목록이 없습니다.</P>'
+                    return;
+                }
                 this.setReservations();
             }
         }
