@@ -30,6 +30,12 @@ class SetHtml {
         let reservations = this.dataModule.rezData.filter(data => data.status !== 'done');
         if (!this.dataModule.rezData || this.dataModule.rezData.length === 0) {
             await this.dataModule.getReservations();
+
+            // 데이터가 없을 경우
+            if (!this.dataModule.rezData || this.dataModule.rezData.length === 0) {
+                document.getElementById('root').innerHTML = '<p>예약목록이 없습니다.</P>'
+                return;
+            }
             reservations = this.dataModule.rezData;
         }
 
